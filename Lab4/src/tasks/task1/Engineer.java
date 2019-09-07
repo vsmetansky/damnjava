@@ -4,23 +4,30 @@ import java.util.Date;
 
 public class Engineer implements Employee {
     protected String name;
+
     public Engineer(String name) {
         this.name = name;
     }
+
     public String getName() {
         return name;
     }
+
     public Date arriveAtWorkplace() {
-        Date arrivalTime = new Date();
-        System.out.println("Engineer " + name + " has arrived. Time: " + arrivalTime );
-        return arrivalTime;
+        return enterOrExitAndLog("Engineer %s has arrived. Time: %tR");
     }
+
     public Date leaveWorkplace() {
-        Date leaveTime = new Date();
-        System.out.println("Engineer " + name + " has left. Time: " + leaveTime );
-        return leaveTime;
+        return enterOrExitAndLog("Engineer %s has left. Time: %tR");
     }
+
+    protected Date enterOrExitAndLog(String message) {
+        Date time = new Date();
+        System.out.printf(message, name, time);
+        return time;
+    }
+
     public void work() {
-        System.out.println("I'm working right now.");
+        System.out.printf("%s is working right now.", name);
     }
 }
