@@ -1,6 +1,6 @@
-package tasks;
+package tasks.task2;
 
-public class Main {
+class Main {
     public static void main(String[] args) {
     }
 }
