@@ -15,49 +15,53 @@ public class Account {
         return balance;
     }
 
-    private boolean perform(OperationType type, double sum) {
-        Operation o = new Operation(type);
-        boolean outcome = o.performOperation(this, sum);
+    private boolean getOperationOutcome(OperationType type, double sum) {
+        return new Operation(type).perform(this, sum);
+    }
+
+    private void updateBalance(OperationType type, double sum) {
+        if (type == OperationType.Income) balance += sum;
+        else balance -= sum;
+    }
+
+    private boolean performOperation(OperationType type, double sum) {
+        boolean outcome = getOperationOutcome(type, sum);
+        if (outcome) updateBalance(type, sum);
         return outcome;
     }
+
     public boolean performWithdrawal(double sum) {
-        boolean outcome = perform(OperationType.Withdrawal, sum);
-        if (outcome) balance -= sum;
-        return outcome;
+        return performOperation(OperationType.Withdrawal, sum);
     }
 
     public boolean performPayment(double sum) {
-        boolean outcome = perform(OperationType.Payment, sum);
-        if (outcome) balance -= sum;
-        return outcome;
+        return performOperation(OperationType.Payment, sum);
     }
 
     public boolean receiveIncome(double sum) {
-        boolean outcome = perform(OperationType.Income, sum);
-        if (outcome) balance += sum;
-        return outcome;
+        return performOperation(OperationType.Income, sum);
     }
 
-    enum OperationType {
+    private enum OperationType {
         Withdrawal,
         Payment,
         Income
     }
 
-    class Operation {
-        protected Date time;
-        protected OperationType type;
+    private class Operation {
+        private Date time;
+        private OperationType type;
 
         Operation(OperationType type) {
             this.time = new Date();
             this.type = type;
         }
 
-        public Date getTime() {
+        Date getTime() {
             return time;
         }
 
-        boolean performOperation(Account a, double sum) {
+        boolean perform(Account a, double sum) {
             if (isValid(a, sum)) {
                 a.operations.add(this);
                 return true;
@@ -65,12 +69,11 @@ public class Account {
             return false;
         }
 
-
         private boolean isValid(Account a, double sum) {
             if (sum > 0 && a != null) {
-                boolean isIncome = true ? type == OperationType.Income : false;
-                if (!isIncome) return true;
-                return a.getBalance() - sum > 0;
+                boolean isIncome = type == OperationType.Income;
+                if (isIncome) return true;
+                return a.getBalance() - sum >= 0;
             }
             return false;
         }
