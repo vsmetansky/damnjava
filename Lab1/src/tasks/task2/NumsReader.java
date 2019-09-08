@@ -35,7 +35,7 @@ public class NumsReader {
     }
 
     private static void logError(Exception e) {
-        System.out.printf("An error occurred (probably input format is wrong): %s", e.getMessage());
+        System.out.printf("An error occurred (probably input format is wrong): %s\n", e.getMessage());
     }
 
     private static void displayMessage(String message) {
